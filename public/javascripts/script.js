@@ -1,9 +1,42 @@
+function sayHello() {
+    $.ajax({
+        url: '/users/hello',
+        method: 'get',
+        success: function (id, textStatus, jqXHR) {
+            getUserName(id);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+        },
+        complete: function (jqXHR, textStatus) {
+            console.log("getData() Ajax Get Complete:", textStatus);
+        }
+    });
+}
+
+function getUserName(id) {
+    $.ajax({
+        url: '/users/hello/' + id,
+        method: 'get',
+        success: function (username) {
+            displayGreeting(username);
+        },
+        error:function(xhr){
+            console.log(xhr);
+        }
+    });
+}
+
+function displayGreeting(username){
+    $('.welcome').text('oh. hi again, ' + username);
+}
+
+
 function showUsers() {
     $.ajax({
         url: '/users/show',
         method: 'get',
         success: function (users, textStatus, jqXHR) {
-            console.log(users);
             processUsers(users);
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -40,5 +73,6 @@ function appendName(username, first_name, last_name){
 }
 
 $(document).ready(function(){
+    sayHello();
     showUsers();
 });
