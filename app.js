@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var session = require('express-session');
+var flash = require('connect-flash');
 var localStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 var User = require('./models/user');
@@ -39,6 +40,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: 'secret',
@@ -68,13 +70,17 @@ passport.use('local', new localStrategy({
     },
     function(req, username, password, done){
         User.findOne({username: username}, function(err, user){
-            if(err) throw (err);
+            if(err)
+                throw (err);
             if(!user)
                 return done(null, false, {message: 'Incorrect username or password'});
             user.comparePassword(password, function(err, isMatch){
-                if (err) throw(err);
-                if(isMatch) return done(null, user);
-                else done(null, false, {message: 'Incorrect username or password'});
+                if (err)
+                    throw(err);
+                if(isMatch)
+                    return done(null, user);
+                else
+                    return done(null, false, {message: 'Incorrect username or password'});
             })
         })
     }

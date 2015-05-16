@@ -4,14 +4,16 @@ var passport = require('passport');
 var path = require('path');
 
 router.get("/", function(req,res,next){
-  res.sendFile(path.resolve(__dirname, '../views/index.html'));
+    res.sendFile(path.resolve(__dirname, '../views/index.html'));
 });
+
 
 router.post('/',
     passport.authenticate('local', {
-      successRedirect: '/users',
-      failureRedirect: '/'
+        successRedirect: '/users',
+        failureRedirect: '/login'
     })
 );
+
 
 module.exports = router;
