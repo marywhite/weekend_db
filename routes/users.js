@@ -6,13 +6,13 @@ var user = require('../models/user');
 
 router.get('/', ensureAuthenticated,
     function(req,res) {
-        //console.log(req.session.passport.user);
         res.sendFile(path.resolve(__dirname, '../views/users.html'));
     }
 );
 
 
 router.get('/hello', function(req, res, next) {
+    console.log(req.session);
     res.json(req.session.passport.user);
 });
 
